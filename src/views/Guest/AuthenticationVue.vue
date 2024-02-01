@@ -14,9 +14,10 @@ const { updateProfile } = useAuthStore()
 
 const formView = ref<'register' | 'login'>('login')
 
+const name = ref()
 const email = ref()
 const password = ref()
-const confirm_password = ref()
+const password_confirmation = ref()
 
 const authRequest = useMutation({
     mutationKey: ['auth'],
@@ -44,6 +45,7 @@ watchEffect(() => {
 </script>
 
 <template>
+    {{ authRequest?.failureReason?.value?.response?.data }}
     <div class=" min-h-dvh flex  bg-zinc-200 p-1">
         <div class=" bg-white w-96 m-auto  shadow-sm overflow-hidden" style="border-radius: 10px;">
             <div class="flex justify-between p-3">
@@ -73,10 +75,19 @@ watchEffect(() => {
 
 
                 <div v-if="formView === 'register'" class="register-form">
+                   
+                     <div class="mt-4">
+                            <InputLabel for="name" value="Name" />
+                            <TextInput id="name" type="name" class="mt-1 block w-full" v-model="name" required autofocus
+                                autocomplete="name" />
+                            <InputError class="mt-2"
+                                :message="authRequest?.failureReason?.value?.response?.data?.errors?.name?.[0]" />
+                        </div>
+                   
                     <div class="mt-4">
                         <InputLabel for="email" value="Email" />
                         <TextInput id="email" type="email" class="mt-1 block w-full" v-model="email" required autofocus
-                            autocomplete="username" />
+                            autocomplete="email" />
                         <InputError class="mt-2"
                             :message="authRequest?.failureReason?.value?.response?.data?.errors?.email?.[0]" />
                     </div>
@@ -89,14 +100,14 @@ watchEffect(() => {
                             :message="authRequest?.failureReason?.value?.response?.data?.errors?.password?.[0]" />
                     </div>
                     <div class="mt-4">
-                        <InputLabel for="confirm_password" value="Confirm password" />
-                        <TextInput id="confirm_password" type="confirm_password" class="mt-1 block w-full"
-                            v-model="confirm_password" required autocomplete="confirm-password" />
+                        <InputLabel for="password_confirmation" value="Confirm password" />
+                        <TextInput id="password_confirmation" type="password" class="mt-1 block w-full"
+                            v-model="password_confirmation" required autocomplete="confirm-password" />
                         <InputError class="mt-2"
-                            :message="authRequest?.failureReason?.value?.response?.data?.errors?.password?.[0]" />
+                            :message="authRequest?.failureReason?.value?.response?.data?.errors?.password_confirmation?.[0]" />
                     </div>
                 </div>
-                <button @click="authRequest.mutate({ email, password, confirm_password } as any)"
+                <button @click="authRequest.mutate({ email, password, password_confirmation, name } as any)"
                     :disabled="authRequest.isPending.value" style="text-transform: uppercase;"
                     class=" bg-green-500 w-full mt-3 py-2">
                     {{ formView }}
