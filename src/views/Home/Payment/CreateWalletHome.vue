@@ -77,10 +77,10 @@ const slug = ref()
                     </span>
 
                     <div class=" flex gap-3">
-                        <div class="col-xl-4 mb-3" >
+                        <div class="col-xl-6 mb-3 flex-grow" >
                             <InputLabel for="slug" value="Select Wallet Denomination" />
                             <select name="slug" id="slug" v-model="slug">
-                                <option value="" selected>Select</option>
+                                <option value="" selected="true">Choose Currency</option>
                                 <option v-for="currency in walletCreateOptions?.data?.value?.data?.currencies"
                                     :value="currency.slug" :key="currency.slug">
                                     {{ currency.name }}
@@ -90,9 +90,9 @@ const slug = ref()
                                 :message="walletCreateMutator?.failureReason?.value?.response?.data?.errors?.slug?.[0]" />
                         </div>
 
-                        <div class="col-xl-4 mb-3">
+                        <div class="col-xl-6 mb-3 flex-grow">
                             <InputLabel for="initial_balance" value="Initial balance" />
-                            <TextInput placeholder="'$0.00'" v-model="initial_balance" type="number" id="initial_balance" />
+                            <TextInput placeholder="0.00" v-model="initial_balance" type="number" id="initial_balance" />
                             <InputError class="mt-2"
                                 :message="walletCreateMutator?.failureReason?.value?.response?.data?.errors?.initial_balance?.[0]" />
                         </div>
