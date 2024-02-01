@@ -22,7 +22,7 @@ const walletCreateOptions = useQuery({
         headers: { Authorization: `Bearer ${user?.value?.token}` }
     }),
     queryKey: ['walletCreateDateResponse'],
-    retry:2
+    retry: 2
 })
 
 
@@ -61,7 +61,8 @@ const slug = ref()
                 <PreLoading />
             </div>
 
-           <InputError v-else-if="walletCreateOptions?.isError.value"  class="mt-2" :message="walletCreateOptions?.failureReason?.value?.message" />
+            <InputError v-else-if="walletCreateOptions?.isError.value" class="mt-2"
+                :message="walletCreateOptions?.failureReason?.value?.message" />
 
             <div v-else class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden flex shadow-sm sm:rounded-lg">
@@ -77,7 +78,7 @@ const slug = ref()
                     </span>
 
                     <div class=" flex gap-3">
-                        <div class="col-xl-6 mb-3 flex-grow" >
+                        <div class="col-xl-6 mb-3 flex-grow">
                             <InputLabel for="slug" value="Select Wallet Denomination" />
                             <select name="slug" id="slug" v-model="slug">
                                 <option value="" selected="true">Choose Currency</option>
@@ -92,7 +93,7 @@ const slug = ref()
 
                         <div class="col-xl-6 mb-3 flex-grow">
                             <InputLabel for="initial_balance" value="Initial balance" />
-                            <TextInput placeholder="0.00" v-model="initial_balance" type="number" id="initial_balance" />
+                            <TextInput :placeholder="`${slug ?? ''} 0.00`" v-model="initial_balance" type="number" id="initial_balance" />
                             <InputError class="mt-2"
                                 :message="walletCreateMutator?.failureReason?.value?.response?.data?.errors?.initial_balance?.[0]" />
                         </div>
