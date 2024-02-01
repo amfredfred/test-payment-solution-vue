@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
 import InputError from '../../../components/InputError.vue';
-import InputLabel from '../../../components/InputLabel.vue';
 import TextInput from '../../../components/TextInput.vue';
 import AuthenticatedLayout from '@/views/Layouts/AuthenticatedLayout.vue';
 import { useMutation, useQuery } from '@tanstack/vue-query';
-import type { WalletCreateDataResponse, TransferCreateDataRresponse } from 'interfaces'
+import type { TransferCreatedResponse, TransferCreateDataRresponse } from 'interfaces'
 import axios from 'axios';
 import { endpoints } from '@/constants';
 import { useAuthStore } from '@/stores/auth';
@@ -15,9 +14,9 @@ const authStore = useAuthStore()
 const user = ref(authStore.user)
 watchEffect(() => user.value = authStore.user)
 
-const tansferCreateOptions = useQuery({
+const transferCreateOptions = useQuery({
     queryFn: async () => await axios<TransferCreateDataRresponse>({
-        baseURL: endpoints.createWalletPage,
+        baseURL: endpoints.createTransferPage,
         method: "GET",
         headers: { Authorization: `Bearer ${user?.value?.token}` }
     }),
@@ -25,20 +24,20 @@ const tansferCreateOptions = useQuery({
 })
 
 
-const walletCreateMutator = useMutation({
-    mutationFn: async (data: any) => await axios<WalletCreatedResponse>({
-        baseURL: endpoints.storeUserWallet,
+const transferCreateMutator = useMutation({
+    mutationFn: async (data: any) => await axios<TransferCreatedResponse>({
+        baseURL: endpoints.storeUserTransfer,
         method: "POST",
         data,
         headers: { Authorization: `Bearer ${user?.value?.token}` }
     }),
-    mutationKey: ['walletCreateMutation'],
-    onSuccess: () => walletCreateOptions.refetch()
+    mutationKey: ['transferCreateMutation'],
+    onSuccess: () => transferCreateOptions.refetch()
 })
 
-const initial_balance = ref()
-const slug = ref()
-
+const recipient_id = ref()
+const wallet_slug = ref()
+const amount = ref()
 </script>
 
 <style>
@@ -61,50 +60,62 @@ const slug = ref()
  
 
 <template>
-    <Head title="Dashboard" />
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
-        </template>
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div v-if="transferCreateOptions?.isLoading.value" class="w-full flex  justify-center">
+                <PreLoading />
+            </div>
+            <div v-else class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">Transfer To User</div>
                 </div>
                 <div class="form-container">
-                    <InputError class="mt-2" :message="$page.props.errors.default" />
+                    <InputError class="mt-2"
+                        :message="transferCreateMutator?.failureReason?.value?.response?.data?.errors?.default" />
 
-                    <form @submit.prevent="submit" :style="'display:flex; flex-wrap:wrap; gap:10px'">
+                    <div :style="'display:flex; flex-wrap:wrap; gap:10px'">
                         <div class="row"
                             style="display: flex;align-items: flex-end;justify-content: space-between; gap: 10px;">
                             <div class="col-xl-4" style="display: flex;flex-direction: column;">
-                                <InputError :message="$page.props.errors.amount" />
-                                <TextInput placeholder="0.00" type="number" v-model="form.amount" />
+                                <InputError
+                                    :message="transferCreateMutator?.failureReason?.value?.response?.data?.errors?.amount?.[0]" />
+                                <TextInput placeholder="0.00" type="number" v-model="amount" />
                             </div>
                             <div class="col-xl-4" style="display: flex;flex-direction: column;">
-                                <InputError :message="$page.props.errors.wallet_slug" />
-                                <select v-model="form.wallet_slug">
+                                <InputError
+                                    :message="transferCreateMutator?.failureReason?.value?.response?.data?.errors?.wallet_slug?.[0]" />
+                                <select v-model="wallet_slug">
                                     <option value="" selected>Choose Wallet</option>
-                                    <option v-for=" wallet  in  wallets " :value="wallet.slug">
+                                    <option v-for=" wallet  in  transferCreateOptions?.data?.value?.data?.wallets"
+                                        :key="wallet.slug" :value="wallet.slug">
                                         {{ wallet.slug.concat(' ' + wallet.balance as any) }}
                                     </option>
                                 </select>
                             </div>
                             <div class="col-xl-4" style="display: flex;flex-direction: column;">
-                                <InputError :message="$page.props.errors.recipient_id" />
-                                <span v-if="recipient_id" style="margin: auto;">
-                                    send to <strong style="color: green;">{{ users[recipient_id] }}</strong>
-                                </span>
-                                <select v-if="!recipient_id" v-model="form.recipient_id">
+                                <InputError
+                                    :message="transferCreateMutator?.failureReason?.value?.response?.data?.errors?.recipient_id?.[0]" />
+                                <!-- <span v-if="recipient_id" style="margin: auto;">
+                                    send to <strong style="color: green;">{{
+                                        transferCreateOptions?.data?.value?.data?.users[recipient_id] }}</strong>
+                                </span> -->
+                                <select   v-model="recipient_id">
                                     <option value='' selected>Choose Recipeint</option>
-                                    <option v-for=" (name, index)  in  users " :value="index">{{ name }}</option>
+                                    <option v-for=" (name, index)  in  transferCreateOptions?.data?.value?.data?.users "
+                                        :key="index" :value="index">{{ name }}</option>
                                 </select>
                             </div>
                         </div>
 
-                        <button :class="''"
-                            :style="'padding: 10px 40px; background: green; border-radius: 50px;color:white; margin-left:auto'">Send</button>
-                    </form>
+                        <div class="col-xl-12">
+                            <button class="" :disabled="transferCreateMutator?.isPending?.value"
+                                @click="transferCreateMutator?.mutate({ wallet_slug, amount, recipient_id })"
+                                style="padding: 10px 40px; background: green; border-radius: 5px;color:white; margin-left:auto; width:100%">
+                                <PreLoading v-if="transferCreateMutator?.isPending.value" />
+                                <span v-else>Send</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

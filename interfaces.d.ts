@@ -58,3 +58,8 @@ export type TransferCreateDataRresponse = {
     users: Profile[]
     recipient_id: number
 }
+
+export type TransferCreatedResponse = {
+    message: string,
+    error: string
+}

@@ -55,12 +55,7 @@ const slug = ref()
 
 <template>
     <Head title="Dashboard" />
-    <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
-        </template>
-
-
+    <AuthenticatedLayout> 
         <div class="py-12">
             <div v-if="walletCreateOptions?.isLoading.value" class="w-full flex  justify-center">
                 <PreLoading />

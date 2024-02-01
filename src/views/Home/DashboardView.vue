@@ -54,7 +54,7 @@ const dashData = useQuery({
                     <div class="row" style="padding: 20px; display: flex; gap: 10px; flex-direction: column; flex-grow: 1;">
                         <div style="display: flex;flex-direction: row;align-items: center;  gap: 10px;">
                             <a style="padding: 10px 20px; background: green; border-radius: 50px;"
-                                href="/transfer">Transfer</a>
+                                href="/payment">Transfer</a>
                             <a style="padding: 10px 20px; background: orangered; border-radius: 50px;"
                                 href="create-wallet">Create Wallet</a>
 

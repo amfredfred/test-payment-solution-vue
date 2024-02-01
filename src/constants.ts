@@ -8,5 +8,6 @@ export const endpoints = {
     createWalletPage: `${BASE_API_URL}create-wallet`,
     storeUserWallet: `${BASE_API_URL}store-user-wallet`,
 
-    createTransferPage: `${BASE_API_URL}transfer`
+    createTransferPage: `${BASE_API_URL}transfer`,
+    storeUserTransfer: `${BASE_API_URL}send-funds`
 }
