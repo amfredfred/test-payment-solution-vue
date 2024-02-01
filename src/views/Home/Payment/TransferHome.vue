@@ -84,12 +84,12 @@ const amount = ref()
                             <div class="col-xl-4" style="display: flex;flex-direction: column;">
                                 <InputError
                                     :message="transferCreateMutator?.failureReason?.value?.response?.data?.errors?.amount?.[0]" />
-                                <TextInput placeholder="0.00" type="number" v-model="amount" />
+                                <TextInput :placeholder="`${wallet_slug ?? ''} 0.00`" type="number" v-model="amount" />
                             </div>
                             <div class="col-xl-4" style="display: flex;flex-direction: column;">
                                 <InputError
                                     :message="transferCreateMutator?.failureReason?.value?.response?.data?.errors?.wallet_slug?.[0]" />
-                                <select v-model="wallet_slug">
+                                <select v-model="wallet_slug"  class="py-2 px-4  bg-orange-200 " style="border-radius: 5px;">
                                     <option value="" selected>Choose Wallet</option>
                                     <option v-for=" wallet  in  transferCreateOptions?.data?.value?.data?.wallets"
                                         :key="wallet.slug" :value="wallet.slug">
@@ -104,7 +104,7 @@ const amount = ref()
                                     send to <strong style="color: green;">{{
                                         transferCreateOptions?.data?.value?.data?.users[recipient_id] }}</strong>
                                 </span> -->
-                                <select v-model="recipient_id">
+                                <select v-model="recipient_id"  class="py-2 px-4  bg-orange-200 " style="border-radius: 5px;">
                                     <option value='' selected>Choose Recipeint</option>
                                     <option v-for=" (name, index)  in  transferCreateOptions?.data?.value?.data?.users "
                                         :key="index" :value="index">{{ name }}</option>

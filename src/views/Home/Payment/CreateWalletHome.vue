@@ -80,7 +80,7 @@ const slug = ref()
                     <div class=" flex gap-3">
                         <div class="col-xl-6 mb-3 flex-grow">
                             <InputLabel for="slug" value="Select Wallet Denomination" />
-                            <select name="slug" id="slug" v-model="slug">
+                            <select name="slug" id="slug" v-model="slug" class="py-2 px-4  bg-orange-200 " style="border-radius: 5px;">
                                 <option value="" selected="true">Choose Currency</option>
                                 <option v-for="currency in walletCreateOptions?.data?.value?.data?.currencies"
                                     :value="currency.slug" :key="currency.slug">
