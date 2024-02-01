@@ -36,7 +36,7 @@ watchEffect(() => user.value = authStore.user)
                </template>
 
                <template #content>
-                  <DropdownLink :href="'/dashbaord'"> Dashboard </DropdownLink>
+                  <DropdownLink :href="'/dashboard'"> Dashboard </DropdownLink>
                   <DropdownLink :href="'/create-wallet'"> Create Wallet </DropdownLink>
                   <button  @click="authStore.logout"  class=" px-4 text-sm text-red-600">
                      Log Out

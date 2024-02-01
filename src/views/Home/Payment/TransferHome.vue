@@ -20,7 +20,8 @@ const transferCreateOptions = useQuery({
         method: "GET",
         headers: { Authorization: `Bearer ${user?.value?.token}` }
     }),
-    queryKey: ['tansferCreateOptionsDataResponse']
+    queryKey: ['tansferCreateOptionsDataResponse'],
+    refetchInterval:2000
 })
 
 
