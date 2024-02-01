@@ -22,4 +22,4 @@ watchEffect(() => {
     </div>
     <RouterView v-else />
   </div>
-</template> 
+</template> @/interfaces

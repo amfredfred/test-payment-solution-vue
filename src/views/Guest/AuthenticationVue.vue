@@ -4,9 +4,9 @@ import TextInput from '@/components/TextInput.vue';
 import { useMutation } from '@tanstack/vue-query';
 import { ref, watchEffect } from 'vue';
 import axios from 'axios'
-import { endpoints } from '../../constants'
+import { endpoints } from '@/constants'
 import InputError from '@/components/InputError.vue';
-import type { AuthResponse } from 'interfaces'
+import type { AuthResponse } from '@/interfaces'
 
 import { useAuthStore } from '@/stores/auth'
 const { updateProfile } = useAuthStore()
@@ -45,7 +45,6 @@ watchEffect(() => {
 </script>
 
 <template>
-    {{ authRequest?.failureReason?.value?.response?.data }}
     <div class=" min-h-dvh flex  bg-zinc-200 p-1">
         <div class=" bg-white w-96 m-auto  shadow-sm overflow-hidden" style="border-radius: 10px;">
             <div class="flex justify-between p-3">

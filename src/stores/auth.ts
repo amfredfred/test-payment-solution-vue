@@ -1,7 +1,7 @@
 'use strict'
 
 import { getItem, setItem } from '@/storage'
-import type { AuthResponse } from 'interfaces'
+import type { AuthResponse } from '@/interfaces'
 import { defineStore } from 'pinia'
 import { ref, onBeforeMount } from 'vue'
 

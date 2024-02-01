@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
-import InputError from '../../../components/InputError.vue';
-import TextInput from '../../../components/TextInput.vue';
+import InputError from '@/components/InputError.vue';
+import TextInput from '@/components/TextInput.vue';
 import AuthenticatedLayout from '@/views/Layouts/AuthenticatedLayout.vue';
 import { useMutation, useQuery } from '@tanstack/vue-query';
-import type { TransferCreatedResponse, TransferCreateDataRresponse } from 'interfaces'
+import type { TransferCreatedResponse, TransferCreateDataRresponse } from '@/interfaces'
 import axios from 'axios';
 import { endpoints } from '@/constants';
 import { useAuthStore } from '@/stores/auth';
@@ -65,10 +65,15 @@ const amount = ref()
             <div v-if="transferCreateOptions?.isLoading.value" class="w-full flex  justify-center">
                 <PreLoading />
             </div>
+
+            <InputError v-else-if="transferCreateOptions?.isError.value"  class="mt-2" :message="transferCreateOptions?.failureReason?.value?.message" />
+
             <div v-else class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">Transfer To User</div>
-                </div>
+               <div class="bg-white overflow-hidden flex shadow-sm sm:rounded-lg">
+                        <div class=" py-3 px-3">
+                            Transfer Funds ==== ==== ====
+                        </div>
+                    </div>
                 <div class="form-container">
                     <InputError class="mt-2"
                         :message="transferCreateMutator?.failureReason?.value?.response?.data?.errors?.default" />
@@ -99,7 +104,7 @@ const amount = ref()
                                     send to <strong style="color: green;">{{
                                         transferCreateOptions?.data?.value?.data?.users[recipient_id] }}</strong>
                                 </span> -->
-                                <select   v-model="recipient_id">
+                                <select v-model="recipient_id">
                                     <option value='' selected>Choose Recipeint</option>
                                     <option v-for=" (name, index)  in  transferCreateOptions?.data?.value?.data?.users "
                                         :key="index" :value="index">{{ name }}</option>
@@ -121,3 +126,4 @@ const amount = ref()
         </div>
     </AuthenticatedLayout>
 </template>
+@/interfaces
